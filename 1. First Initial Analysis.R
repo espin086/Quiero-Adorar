@@ -90,7 +90,7 @@ length(unique(song.word.v))
 #Unique words as a percentage of all words
 length(unique(song.word.v))/length(song.word.v)
 
-#Favorite songs in songs
+#Favorite words in songs
 song.freq.t <- table(song.word.v)
 sorted.song.freq.t <- sort(song.freq.t, decreasing = TRUE)
 sorted.song.freq.t
@@ -105,9 +105,9 @@ sorted.song.freq.t["him"]/sorted.song.freq.t["her"]
 sorted.song.rel.freqs.t <- 100*(sorted.song.freq.t/sum(sorted.song.freq.t))
 
 #Top 10 Words
-plot(sorted.song.rel.freqs.t[1:10], type = "b", 
-     xlab = "Top Ten Words", ylab = "Percentage of Quiero Adorar", xaxt = "n")
-axis(1, 1: 10, labels = names(sorted.song.rel.freqs.t[1:10]))
+plot(sorted.song.rel.freqs.t[1:20], type = "b", 
+     xlab = "Top Twenty Words", ylab = "Percentage of Quiero Adorar", xaxt = "n")
+axis(1, 1: 20, labels = names(sorted.song.rel.freqs.t[1:20]))
 
 ################################################################
 #Token Distribution Analysis
