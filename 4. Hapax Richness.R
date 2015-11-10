@@ -92,62 +92,15 @@ for(i in 1:length(song.position)){#initiates a for loop that iterates over song 
   }
 }
 
-###################################################
-#Begining of listwise analysis
+##################################
+#Hapax analysis
 
-#Applying the subset function to the relative frequency of a word in each song
-quiero.l <- lapply(song.freqs.l, '[', 'quiero')
-adorar.l <- lapply(song.freqs.l, '[', 'adorar')
+#Counting words that only appear once a.k.a Hapax per song
+song.hapax.v <- sapply(song.raws.l, function(x) sum(x == 1))
 
-#Rbinding all the list to get a matrix with all the data
-quiero.m <- do.call(rbind,quiero.l)
-adorar.m <- do.call(rbind,adorar.l)
+#length per song
+song.length <- do.call(rbind,lapply(song.raws.l, sum))
 
-#Pulling frequency vectors out to combine two frequencies
-quiero.v <- quiero.m[,1]
-adorar.v <- adorar.m[,1]
-quiero.adorar.m <- cbind(quiero.v, adorar.v)
-
-#Renaming columns above
-colnames(quiero.adorar.m) <- c("quiero", "adorar")
-
-#Creating a barplot of the two words
-barplot(quiero.adorar.m, beside = TRUE, col = 'red')
-
-#############################################
-#Correlation Analysis
-
-#setting NAs equal to blanks
-the.na.positions <- which(is.na(quiero.adorar.m))
-#set the values of NA to zero in the matrix
-quiero.adorar.m[the.na.positions] <- 0
-
-#running the correlation analysis
-cor(quiero.adorar.m)
-
-#converting to a dataframe for testing purposes and ease of use
-cor.data.df <- as.data.frame(quiero.adorar.m)
-cor(cor.data.df)
-
-#Single randomized correlation
-cor(sample(cor.data.df$quiero), cor.data.df$adorar)
-
-
-#the following code is used to demonstrate how common the correlation we observed would happen by chance
-mycors.v <- NULL
-for (i in 1:10000){
-        mycors.v <- c(mycors.v, cor(sample(cor.data.df$quiero), cor.data.df$adorar))
-}
-
-#Plotting the distribution
-h <- hist(mycors.v, breaks = 100, col='red',
-     xlab="Correlation Coefficient", 
-     main = "Histogram of Randmo Correlation Coefificien\n
-     with Normal Curve", 
-     plot=TRUE)
-
-xfit <- seq(min(mycors.v), max(mycors.v), length = 1000)
-yfit <- dnorm(xfit, mean =mean(mycors.v), sd = sd(mycors.v))
-yfit <- yfit*diff(h$mids[1:2])*length(mycors.v)
-lines(xfit, yfit, col = "black", lwd=2)
-
+#Calculating hapax percentages
+barplot(hapax.percentages, beside = T, col = 'red', names.arg = seq(1:length(song.raws.l)))
+hapax.percentages <- song.hapax.v/song.length

@@ -92,62 +92,33 @@ for(i in 1:length(song.position)){#initiates a for loop that iterates over song 
   }
 }
 
-###################################################
-#Begining of listwise analysis
+#######################################################
+#Start of Measures of Lexical Variety
 
-#Applying the subset function to the relative frequency of a word in each song
-quiero.l <- lapply(song.freqs.l, '[', 'quiero')
-adorar.l <- lapply(song.freqs.l, '[', 'adorar')
+#Exploring the list object to see what it contains
+length(song.raws.l)
+names(song.raws.l)
+str(song.raws.l)
+class(song.raws.l$`SONG: 1: OLOR FRAGANTE `)
+song.raws.l[[1]]
 
-#Rbinding all the list to get a matrix with all the data
-quiero.m <- do.call(rbind,quiero.l)
-adorar.m <- do.call(rbind,adorar.l)
+#Calculating TTR: type to token ratio for one song
+sum(song.raws.l[[1]])/length(song.raws.l[[1]])
 
-#Pulling frequency vectors out to combine two frequencies
-quiero.v <- quiero.m[,1]
-adorar.v <- adorar.m[,1]
-quiero.adorar.m <- cbind(quiero.v, adorar.v)
+#Here is a simple way to do this...
+mean(song.raws.l[[1]])
 
-#Renaming columns above
-colnames(quiero.adorar.m) <- c("quiero", "adorar")
+#TTR using lapply to get it for each song
+mean.word.use.m <- do.call(rbind, lapply(song.raws.l, mean))
 
-#Creating a barplot of the two words
-barplot(quiero.adorar.m, beside = TRUE, col = 'red')
+#plotting the word frequency
+plot(mean.word.use.m ,type = 'h')
 
-#############################################
-#Correlation Analysis
+#scaling the songs relative to each other
+plot(scale(mean.word.use.m), type = 'h')
 
-#setting NAs equal to blanks
-the.na.positions <- which(is.na(quiero.adorar.m))
-#set the values of NA to zero in the matrix
-quiero.adorar.m[the.na.positions] <- 0
+#Ordering songs by decreasing order of average word frequency
+order(mean.word.use.m, decreasing = TRUE)
 
-#running the correlation analysis
-cor(quiero.adorar.m)
-
-#converting to a dataframe for testing purposes and ease of use
-cor.data.df <- as.data.frame(quiero.adorar.m)
-cor(cor.data.df)
-
-#Single randomized correlation
-cor(sample(cor.data.df$quiero), cor.data.df$adorar)
-
-
-#the following code is used to demonstrate how common the correlation we observed would happen by chance
-mycors.v <- NULL
-for (i in 1:10000){
-        mycors.v <- c(mycors.v, cor(sample(cor.data.df$quiero), cor.data.df$adorar))
-}
-
-#Plotting the distribution
-h <- hist(mycors.v, breaks = 100, col='red',
-     xlab="Correlation Coefficient", 
-     main = "Histogram of Randmo Correlation Coefificien\n
-     with Normal Curve", 
-     plot=TRUE)
-
-xfit <- seq(min(mycors.v), max(mycors.v), length = 1000)
-yfit <- dnorm(xfit, mean =mean(mycors.v), sd = sd(mycors.v))
-yfit <- yfit*diff(h$mids[1:2])*length(mycors.v)
-lines(xfit, yfit, col = "black", lwd=2)
-
+#Using the ordering above to order the dataframe
+mean.word.use.m[order(mean.word.use.m, decreasing = TRUE),]
