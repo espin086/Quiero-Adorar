@@ -2,7 +2,7 @@
 ################################################################
 #Importing Songs
 
-setwd("~/Documents/Text Analysis of Quiero Adorar")
+setwd("~/Documents/Text Analysis of Quiero Adorar/Quiero-Adorar")
 text.v <- scan("Songs.txt", what = "character", sep = "\n")
 head(text.v)
 
@@ -108,6 +108,9 @@ sorted.song.rel.freqs.t <- 100*(sorted.song.freq.t/sum(sorted.song.freq.t))
 plot(sorted.song.rel.freqs.t[1:20], type = "b", 
      xlab = "Top Twenty Words", ylab = "Percentage of Quiero Adorar", xaxt = "n")
 axis(1, 1: 20, labels = names(sorted.song.rel.freqs.t[1:20]))
+
+
+
 
 ################################################################
 #Token Distribution Analysis
