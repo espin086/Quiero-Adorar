@@ -142,7 +142,7 @@ for (i in 1:10000){
 #Plotting the distribution
 h <- hist(mycors.v, breaks = 100, col='red',
      xlab="Correlation Coefficient", 
-     main = "Histogram of Randmo Correlation Coefificien\n
+     main = "Histogram of Random Correlation Coefificien\n
      with Normal Curve", 
      plot=TRUE)
 

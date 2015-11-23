@@ -102,5 +102,6 @@ song.hapax.v <- sapply(song.raws.l, function(x) sum(x == 1))
 song.length <- do.call(rbind,lapply(song.raws.l, sum))
 
 #Calculating hapax percentages
-barplot(hapax.percentages, beside = T, col = 'red', names.arg = seq(1:length(song.raws.l)))
 hapax.percentages <- song.hapax.v/song.length
+barplot(hapax.percentages, beside = T, col = 'red', names.arg = seq(1:length(song.raws.l)))
+
