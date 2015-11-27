@@ -1,3 +1,5 @@
+library(tm)
+library(wordcloud)
 
 ################################################################
 #Importing Songs
@@ -16,10 +18,7 @@ docs <- tm_map(docs, removeNumbers)
 
 # Remove english common stopwords
 docs <- tm_map(docs, removeWords, stopwords("english"))
-
-# Remove your own stop word
-# specify your stopwords as a character vector
-docs <- tm_map(docs, removeWords, c("blabla1", "blabla2")) 
+docs <- tm_map(docs, removeWords, stopwords("spanish"))
 
 # Remove punctuations
 docs <- tm_map(docs, removePunctuation)
@@ -27,20 +26,70 @@ docs <- tm_map(docs, removePunctuation)
 # Eliminate extra white spaces
 docs <- tm_map(docs, stripWhitespace)
 
-# Text stemming
-# docs <- tm_map(docs, stemDocument)
+
+# Remove your own stop word
+# specify your stopwords as a character vector
+docs <- tm_map(docs, removeWords, c("que", "precoro",
+                                    "sofi",
+                                    "verse",
+                                     "bridge",
+                                    "ohu",
+                                    "oh oh",
+                                    "ohohoh",
+                                    "uuu",
+                                    "julio",
+                                    "chorus",
+                                    "verso",
+                                    "response",
+                                    "end",
+                                    "verse",
+                                    "coro",
+                                    "slow",
+                                    "oh oh",
+                                    "ahh",
+                                    "uuu",
+                                    "ohu",
+                                    "ohoh",
+                                    "song",
+                                    "pre",
+                                    "let",
+                                    "ohohoh",
+                                    "ohohohohohohohoh",
+                                    "cada",
+                                    "uuu",
+                                    "set",
+                                    "peleas",
+                                    "lose",
+                                    "uuuuu",
+                                    "ahh",
+                                    "ahhahh",
+                                    "mas",
+                                    "sostien",
+                                    "uuuu",
+                                    "dsciende",
+                                    "melgar",
+                                    "songve",
+                                    "though",
+                                    "wont",
+                                    "uuuu"
+                                    ))
+
+
+
+
+
 
 dtm <- TermDocumentMatrix(docs)
 m <- as.matrix(dtm)
 v <- sort(rowSums(m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
-d <- d[which(d$word != "que"),]
-head(d, 10)
+d
 
-set.seed(1234)
-wordcloud(words = d$word, freq = d$freq, min.freq = 1,
-          max.words=500, random.order=FALSE, rot.per=0.35, 
-          colors=brewer.pal(8, "Dark2"))
+set.seed(6)
+
+#artificially increasing 'quiero' and 'adorar'
+d[which(d$word=="quiero"),2] <- 70
+d[which(d$word=="adorar"),2] <- 70
 
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
-          max.words=500, random.order=FALSE, rot.per=0.35)
+          max.words=dim(d)[1], random.order=FALSE, rot.per=0.35)
