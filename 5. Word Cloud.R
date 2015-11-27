@@ -71,9 +71,17 @@ docs <- tm_map(docs, removeWords, c("que", "precoro",
                                     "songve",
                                     "though",
                                     "wont",
-                                    "uuuu"
+                                    "uuuu",
+                                    "causen",
+                                    "falla",
+                                    "hacia",
+                                    "comes",
+                                    "late",
+                                    "please",
+                                    "sostienresponse",
+                                    "talk",
+                                    "music"
                                     ))
-
 
 
 
@@ -85,11 +93,14 @@ v <- sort(rowSums(m),decreasing=TRUE)
 d <- data.frame(word = names(v),freq=v)
 d
 
-set.seed(6)
+set.seed(18)
 
 #artificially increasing 'quiero' and 'adorar'
-d[which(d$word=="quiero"),2] <- 70
-d[which(d$word=="adorar"),2] <- 70
+d[which(d$word=="quiero"),2] <- 50
+d[which(d$word=="adorar"),2] <- 50
+d[which(d$word=="comin"),1] <- "coming"
+d[which(d$word=="consolad"),1] <- "consolador"
 
+#change "max.words = dim(d)[1]" to get all words in doc
 wordcloud(words = d$word, freq = d$freq, min.freq = 1,
           max.words=dim(d)[1], random.order=FALSE, rot.per=0.35)
